@@ -1,4 +1,4 @@
-# COD7FLOW 🗂️
+# COD8FLOW 🗂️
 
 A full-stack project management SaaS application built with Java Spring Boot and React.
 Inspired by Jira — built from scratch to learn industry-grade Java development end to end.
