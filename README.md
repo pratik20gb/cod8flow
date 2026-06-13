@@ -1,244 +1,311 @@
-# COD7FLOW 🗂️
+<div align="center">
 
-A full-stack project management SaaS application built with Java Spring Boot and React.
-Inspired by Jira — built from scratch to learn industry-grade Java development end to end.
+[//]: # (  <img src="cod8flowreadme\assets\banner.png" alt="COD8FLOW Banner" width="100% height="60px>)
+  <br><br>
+  <img src="cod8flowreadme\assets\logo.png" alt="COD8FLOW Logo" width="128" height="128">
+  <h1>COD8FLOW</h1>
+  <p>
+    <strong>Full-stack project management SaaS platform</strong><br>
+    Built and deployed with Java Spring Boot 3 + React 18 + TypeScript
+  </p>
 
-## 🚀 Tech Stack
+  <p>
+    <a href="https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white"><img src="https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white" alt="Java 21"></a>
+    <a href="https://img.shields.io/badge/Spring%20Boot-3-6DB33F?logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/Spring%20Boot-3-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot 3"></a>
+    <a href="#"><img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" alt="React 18"></a>
+    <a href="#"><img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
+    <a href="#"><img src="https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql&logoColor=white" alt="PostgreSQL"></a>
+    <a href="#"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  </p>
 
-### Backend
-- **Java 21** — LTS version used in production by most companies
-- **Spring Boot 3** — Industry standard Java framework
-- **Spring Security + JWT** — Stateless authentication with access + refresh tokens
-- **Spring Data JPA + Hibernate** — ORM for database operations
-- **PostgreSQL** — Primary relational database
-- **Flyway** — Database schema versioning and migrations
-- **Redis** — Caching layer for performance
-- **Apache Kafka** — Async event-driven notifications
-- **AWS S3** — File and attachment storage
-
-### Frontend
-- **React 18 + TypeScript** — Type-safe component-based UI
-- **React Query (TanStack)** — Server state management and caching
-- **Axios** — HTTP client
-- **Tailwind CSS** — Utility-first styling
-- **Zustand** — Client-side state management
-- **React Router** — Client-side routing
-
-### DevOps & Observability
-- **Docker + Docker Compose** — Containerized local development
-- **GitHub Actions** — CI/CD pipeline
-- **Prometheus + Grafana** — Metrics and monitoring dashboards
-- **Logback** — Structured logging
+  <p>
+    <a href="#-getting-started">Getting Started</a> •
+    <a href="#-api-reference">API Reference</a> •
+    <a href="#-architecture">Architecture</a> •
+    <a href="#-roadmap">Roadmap</a>
+  </p>
+</div>
 
 ---
 
-## 🏗️ Architecture
+## Overview
+
+**COD8FLOW** is a full-stack project management SaaS platform.
+
+We built it as our own product and actively deploy it using modern, production-grade technologies and patterns. The platform delivers workspace organization, boards, tasks, and workflow management with a clean, fast, and reliable user experience.
+
+The stack is deliberately chosen for scalability, maintainability, and operational excellence:
+
+- Stateless JWT authentication with refresh tokens
+- Clean layered architecture with Spring Boot
+- Versioned database migrations, distributed caching, event-driven notifications, and cloud object storage
+- Strong observability from day one
+
+COD8FLOW is containerized, CI/CD-enabled, and designed to run reliably in production environments.
+
+## Key Features
+
+- **Workspaces & Boards** — Organize projects and teams hierarchically
+- **Task Management** — Full task lifecycle with status workflows, priorities, and rich metadata
+- **Secure Authentication** — Email/password registration, login, and refresh token rotation
+- **Production-Ready Backend** — Spring Boot 3, PostgreSQL, Flyway, Redis, Kafka, and AWS S3
+- **Modern React Frontend** — Fast, type-safe interface built with React 18, TanStack Query, Zustand, and Tailwind
+- **Observability & Operations** — Health checks, metrics, structured logging, and monitoring-ready setup
+- **Deployment Focused** — Docker Compose for local parity, GitHub Actions CI/CD, and clear production deployment paths
+
+## Tech Stack
+
+### Backend
+| Category          | Technology                          | Role in Production                          |
+|-------------------|-------------------------------------|---------------------------------------------|
+| Language          | Java 21 (LTS)                       | High-performance, long-term supported runtime |
+| Framework         | Spring Boot 3                       | Robust, battle-tested application platform  |
+| Security          | Spring Security + JWT               | Stateless authentication with token rotation |
+| Persistence       | Spring Data JPA + Hibernate         | Reliable ORM and data access                |
+| Primary Database  | PostgreSQL 16                       | ACID-compliant relational store             |
+| Schema Management | Flyway                              | Safe, version-controlled migrations         |
+| Caching           | Redis 7                             | Low-latency caching and session support     |
+| Async Messaging   | Apache Kafka                        | Event-driven notifications and decoupling   |
+| File Storage      | AWS S3                              | Scalable attachment and asset storage       |
+| API Layer         | Spring MVC (REST)                   | Clean, versioned HTTP interface             |
+
+### Frontend
+- **React 18 + TypeScript** — Type-safe component architecture
+- **TanStack Query** — Efficient server state management and caching
+- **Axios** — Typed HTTP client
+- **Tailwind CSS** — Consistent, maintainable design system
+- **Zustand** — Lightweight global client state
+- **React Router** — Modern client-side navigation
+
+### DevOps & Observability
+- Docker + Docker Compose (reproducible environments)
+- GitHub Actions (automated CI/CD pipelines)
+- Spring Boot Actuator + Prometheus + Grafana (metrics & dashboards)
+- Structured logging with Logback
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph Frontend["React 18 + TypeScript Frontend"]
+        direction TB
+        RQ[React Query]
+        Z[Zustand]
+        TW[Tailwind CSS]
+        RR[React Router]
+    end
+
+    subgraph Backend["Spring Boot 3 Backend"]
+        direction TB
+        Auth[Auth Service]
+        WS[Workspace Service]
+        Board[Board Service]
+        Task[Task Service]
+        Notif[Notification Service]
+    end
+
+    subgraph Infrastructure["Production Infrastructure"]
+        direction TB
+        PG[(PostgreSQL<br/>+ Flyway)]
+        RED[(Redis<br/>Cache)]
+        KAFKA[(Kafka<br/>Events)]
+        S3[(AWS S3<br/>Storage)]
+    end
+
+    Frontend -->|REST / JSON| Backend
+    Backend -->|JPA| PG
+    Backend -->|Cache| RED
+    Backend -->|Publish / Consume| KAFKA
+    Backend -->|Objects| S3
+```
+
+The backend follows a clear, maintainable layered architecture:
 
 ```
-┌─────────────────────────────────────────────────────┐
-│              React 18 + TypeScript                   │
-│         React Query · Zustand · Tailwind             │
-└─────────────────────┬───────────────────────────────┘
-                      │ REST / JSON
-┌─────────────────────▼───────────────────────────────┐
-│                Spring Boot 3                         │
-│                                                      │
-│  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐  │
-│  │   Auth      │ │   Project    │ │ Notification │  │
-│  │  Service    │ │   Service    │ │   Service    │  │
-│  └─────────────┘ └──────────────┘ └──────────────┘  │
-│                                                      │
-│  Spring MVC · Spring Data JPA · Spring Security      │
-└──────┬──────────────┬──────────┬────────────┬───────┘
-       │              │          │            │
-┌──────▼───┐  ┌───────▼──┐ ┌────▼────┐ ┌────▼────┐
-│PostgreSQL│  │  Redis   │ │  Kafka  │ │  AWS S3 │
-│ Flyway   │  │  Cache   │ │ Events  │ │  Files  │
-└──────────┘  └──────────┘ └─────────┘ └─────────┘
+controller → service → repository → entity
+             ↑
+          dto (request / response)
 ```
 
-## 📁 Project Structure
+Cross-cutting concerns (security, validation, transactions, error handling) are centralized using Spring best practices.
+
+## Project Structure
 
 ```
 src/main/java/com/cod8flow/
-├── config/          # Spring configuration (Security, Redis, S3)
-├── controller/      # REST controllers — HTTP layer
-├── service/         # Business logic layer
-├── repository/      # Database access layer
+├── config/              # Security, Redis, S3, Kafka, and infrastructure configuration
+├── controller/          # REST API controllers
+├── service/             # Core business logic and transaction management
+├── repository/          # Data access layer (Spring Data JPA)
 ├── domain/
-│   ├── entity/      # JPA entities (User, Workspace, Board, Task)
-│   └── enums/       # TaskStatus, Priority, Role
+│   ├── entity/          # JPA entities
+│   └── enums/           # Domain enumerations (status, priority, roles, etc.)
 ├── dto/
-│   ├── request/     # Incoming request bodies
-│   └── response/    # Outgoing response bodies
-├── exception/       # Custom exceptions + global error handler
-├── security/        # JWT filter + UserDetails implementation
-└── util/            # Helper classes
+│   ├── request/         # Incoming request models with validation
+│   └── response/        # Outgoing API response models
+├── exception/           # Custom exceptions and global error handling
+├── security/            # JWT authentication filter and security configuration
+└── util/                # Shared utilities
 
 src/main/resources/
-├── db/migration/    # Flyway SQL migrations (V1__, V2__, ...)
-└── application.yml  # Application configuration
+├── db/migration/        # Flyway SQL migrations (V1__, V2__, ...)
+└── application.yml      # Environment-aware configuration
 ```
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
-
-- Java 21
+- Java 21 JDK
 - Docker Desktop
-- Maven (included via `./mvnw` wrapper)
 - Git
+- (Maven wrapper included — no separate Maven install required)
 
-### Clone the repository
+### Clone and start
 
 ```bash
 git clone https://github.com/pratik20gb/cod8flow.git
 cd cod8flow
 ```
 
-### Start infrastructure
+Start the supporting services:
 
 ```bash
-# Starts PostgreSQL and Redis in Docker
 docker compose up -d
 ```
 
-### Run the application
+Run the application:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-The API will be available at `http://localhost:8080`
+The API is available at `http://localhost:8080`
 
-### Verify it's running
+### Health check
 
 ```bash
 curl http://localhost:8080/api/v1/health
 ```
 
-Expected response:
+Successful response:
+
 ```json
 {
   "status": "UP",
   "service": "cod8flow API",
   "version": "1.0.0",
-  "timestamp": "2026-06-02T..."
+  "timestamp": "..."
 }
 ```
 
----
+## API Reference
 
-## 🔌 API Endpoints
-```
 ### Authentication
-POST   /api/v1/auth/register     # Create a new account
-POST   /api/v1/auth/login        # Login and get JWT tokens
-POST   /api/v1/auth/refresh      # Refresh expired access token
+| Method | Endpoint                        | Description                              |
+|--------|---------------------------------|------------------------------------------|
+| POST   | `/api/v1/auth/register`         | Create a new account                     |
+| POST   | `/api/v1/auth/login`            | Authenticate and receive access + refresh tokens |
+| POST   | `/api/v1/auth/refresh`          | Obtain a new access token using refresh token |
+
+All authenticated endpoints require the header:  
+`Authorization: Bearer <access_token>`
+
 ### Workspaces
-GET    /api/v1/workspaces        # List all workspaces
-POST   /api/v1/workspaces        # Create a workspace
-GET    /api/v1/workspaces/{id}   # Get workspace by ID
-PUT    /api/v1/workspaces/{id}   # Update workspace
-DELETE /api/v1/workspaces/{id}   # Delete workspace
+| Method | Endpoint                          |
+|--------|-----------------------------------|
+| GET    | `/api/v1/workspaces`              |
+| POST   | `/api/v1/workspaces`              |
+| GET    | `/api/v1/workspaces/{id}`         |
+| PUT    | `/api/v1/workspaces/{id}`         |
+| DELETE | `/api/v1/workspaces/{id}`         |
+
 ### Boards
-GET    /api/v1/workspaces/{id}/boards    # List boards in workspace
-POST   /api/v1/workspaces/{id}/boards   # Create a board
-GET    /api/v1/boards/{id}              # Get board by ID
-DELETE /api/v1/boards/{id}              # Delete board
+| Method | Endpoint                                      |
+|--------|-----------------------------------------------|
+| GET    | `/api/v1/workspaces/{workspaceId}/boards`     |
+| POST   | `/api/v1/workspaces/{workspaceId}/boards`     |
+| GET    | `/api/v1/boards/{boardId}`                    |
+| DELETE | `/api/v1/boards/{boardId}`                    |
+
 ### Tasks
-GET    /api/v1/boards/{id}/tasks        # List tasks on a board
-POST   /api/v1/boards/{id}/tasks        # Create a task
-GET    /api/v1/tasks/{id}               # Get task by ID
-PUT    /api/v1/tasks/{id}               # Update task
-PATCH  /api/v1/tasks/{id}/status        # Update task status only
-DELETE /api/v1/tasks/{id}               # Delete task
+| Method | Endpoint                                 |
+|--------|------------------------------------------|
+| GET    | `/api/v1/boards/{boardId}/tasks`         |
+| POST   | `/api/v1/boards/{boardId}/tasks`         |
+| GET    | `/api/v1/tasks/{taskId}`                 |
+| PUT    | `/api/v1/tasks/{taskId}`                 |
+| PATCH  | `/api/v1/tasks/{taskId}/status`          |
+| DELETE | `/api/v1/tasks/{taskId}`                 |
+
 ### Health & Monitoring
-GET    /api/v1/health            # Application health check
-GET    /actuator/health          # Spring Actuator health
-GET    /actuator/metrics         # Application metrics
----
-```
-## 📊 Project Status
+- `GET /api/v1/health`
+- `GET /actuator/health`
+- `GET /actuator/metrics`
+- `GET /actuator/prometheus`
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| Phase 1 | Project setup, Docker, Flyway, Health endpoint | ✅ Complete |
-| Phase 2 | JWT Authentication — register, login, refresh | 🔄 In Progress |
-| Phase 3 | Core domain — workspaces, boards, tasks | ⏳ Pending |
-| Phase 4 | Redis caching + AWS S3 file uploads | ⏳ Pending |
-| Phase 5 | Kafka events + email notifications | ⏳ Pending |
-| Phase 6 | Testing — JUnit, Mockito, Testcontainers | ⏳ Pending |
-| Phase 7 | React frontend + CI/CD + Grafana | ⏳ Pending |
+## Authentication
 
----
-```
-## 🔐 Authentication Flow
-POST /auth/register
-→ Password hashed with BCrypt
-→ User saved to PostgreSQL
-→ Access token (15 min) + Refresh token (7 days) returned
-POST /auth/login
-→ Email + password verified
-→ New access + refresh tokens returned
-Every protected request
-→ Authorization: Bearer <access_token> header required
-→ JWT filter validates signature and expiry
-→ 401 Unauthorized if missing or invalid
-```
-## 🐳 Docker Services
+- Passwords are hashed with BCrypt before storage.
+- Successful login and registration return a short-lived access token (15 minutes) and a longer-lived refresh token (7 days).
+- The refresh endpoint allows clients to obtain fresh access tokens without re-authenticating the user.
+- All protected routes are secured by a JWT filter that validates signature and expiration.
 
-| Service | Image | Port |
-|---------|-------|------|
-| PostgreSQL | postgres:16-alpine | 5432 |
-| Redis | redis:7-alpine | 6379 |
+## Docker Services
 
----
+| Service    | Image                | Host Port |
+|------------|----------------------|-----------|
+| PostgreSQL | `postgres:16-alpine` | 5432      |
+| Redis      | `redis:7-alpine`     | 6379      |
 
-## 📝 Database Migrations
+## Database Migrations
 
-Managed by Flyway. Migration files live in `src/main/resources/db/migration/`.
+Schema changes are managed exclusively with **Flyway**.
 
-| Version | Description |
-|---------|-------------|
-| V1 | Create users table |
+- Migration files are located in `src/main/resources/db/migration/`
+- Files follow the convention `V{N}__{description}.sql`
+- Never modify a migration that has already been applied to any environment.
 
-New migrations are added as `V2__description.sql`, `V3__description.sql` etc. Never edit an existing migration file.
+## Roadmap
 
----
+| Phase | Focus                                                      | Status          |
+|-------|------------------------------------------------------------|-----------------|
+| 1     | Core setup, Docker, Flyway, health endpoints               | ✅ Complete    |
+| 2     | Authentication (register, login, refresh tokens)           | 🚧 In Progress |
+| 3     | Workspaces, Boards, Tasks — full domain implementation     | ⏳ Pending     |
+| 4     | Redis caching + AWS S3 file & attachment support           | ⏳ Pending     |
+| 5     | Kafka event bus + notification system                      | ⏳ Pending     |
+| 6     | Testing suite (unit, integration, API)                     | ⏳ Pending     |
+| 7     | Production frontend, CI/CD pipeline, monitoring dashboards | ⏳ Pending     |
 
-## 🧪 Testing Strategy
+## Observability
 
-- **Unit tests** — JUnit 5 + Mockito for service layer
-- **Integration tests** — Testcontainers (real PostgreSQL in Docker)
-- **API tests** — MockMvc for controller layer
-- **Coverage target** — 80%+
+COD8FLOW is built with production monitoring in mind:
 
----
+- Spring Boot Actuator exposes health and metrics
+- Prometheus endpoint ready for scraping
+- Grafana dashboards can be added for request rates, latency, error rates, and JVM metrics
+- Structured Logback logging for easy aggregation
 
-## 📈 Monitoring
+## Contributing
 
-Once Phase 7 is complete:
-- Prometheus scrapes metrics from `/actuator/prometheus`
-- Grafana dashboard visualizes request rates, response times, error rates
-- Structured logs via Logback with timestamp, thread, level, and class
+We welcome thoughtful contributions that improve the product.
 
----
+- Keep changes focused and well-described
+- Follow the existing package layout and coding style
+- Run tests and verify the build passes before submitting PRs (as coverage expands)
 
-## 🤝 Contributing
+## License
 
-This is a personal learning project. Feel free to fork it and build your own version.
+MIT © Pratik
 
----
-
-## 👨‍💻 Author
+## Built by
 
 **Pratik** — [@pratik20gb](https://github.com/pratik20gb)
 
-Built as a complete full-stack Java learning project — from zero to production-grade.
+COD8FLOW is our own SaaS product. We design, build, and deploy it using the same standards we expect from production systems.
 
 ---
 
-## 📄 License
-
-MIT License — free to use and learn from.
+<div align="center">
+  <sub>If COD8FLOW helps your team ship better, a star on GitHub is always appreciated.</sub>
+</div>
