@@ -8,7 +8,7 @@
 		<version>4.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.flowboard</groupId>
+	<groupId>com.cod8flow</groupId>
 	<artifactId>cod8flow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>

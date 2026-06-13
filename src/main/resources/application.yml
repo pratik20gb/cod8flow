@@ -3,9 +3,9 @@ spring:
     name: cod8flow
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/flowboard_db
-    username: ${DB_USERNAME:com.cod8flow}
-    password: ${DB_PASSWORD:com.cod8flow}
+    url: jdbc:postgresql://localhost:5433/cod8flow_db
+    username: ${DB_USERNAME:cod8flow}
+    password: ${DB_PASSWORD:cod8flow}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10

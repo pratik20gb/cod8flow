@@ -16,7 +16,7 @@ public class HealthController {
     public ResponseEntity<Map<String, Object>> health() {
         return ResponseEntity.ok(Map.of(
                 "status", "UP",
-                "service", "FlowBoard API",
+                "service", "Cod8Flow API",
                 "timestamp", LocalDateTime.now().toString(),
                 "version", "1.0.0"
         ));

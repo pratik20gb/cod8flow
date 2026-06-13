@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -9,11 +7,11 @@ services:
       POSTGRES_USER: cod8flow
       POSTGRES_PASSWORD: cod8flow
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cod8flow -d flowboard_db"]
+      test: ["CMD-SHELL", "pg_isready -U cod8flow -d cod8flow_db"]
       interval: 10s
       timeout: 5s
       retries: 5
