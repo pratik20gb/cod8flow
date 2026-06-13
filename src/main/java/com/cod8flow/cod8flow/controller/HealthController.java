@@ -1,4 +1,4 @@
-package com.flowboard.flowboard.controller;
+package com.cod8flow.cod8flow.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

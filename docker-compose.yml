@@ -3,24 +3,24 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: flowboard-postgres
+    container_name: cod8flow-postgres
     environment:
-      POSTGRES_DB: flowboard_db
-      POSTGRES_USER: flowboard
-      POSTGRES_PASSWORD: flowboard
+      POSTGRES_DB: cod8flow_db
+      POSTGRES_USER: cod8flow
+      POSTGRES_PASSWORD: cod8flow
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U flowboard -d flowboard_db"]
+      test: ["CMD-SHELL", "pg_isready -U cod8flow -d flowboard_db"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:7-alpine
-    container_name: flowboard-redis
+    container_name: cod8flow-redis
     ports:
       - "6379:6379"
     volumes:

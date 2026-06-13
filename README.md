@@ -1,4 +1,4 @@
-# FlowBoard 🗂️
+# COD7FLOW 🗂️
 
 A full-stack project management SaaS application built with Java Spring Boot and React.
 Inspired by Jira — built from scratch to learn industry-grade Java development end to end.
@@ -121,7 +121,7 @@ Expected response:
 ```json
 {
   "status": "UP",
-  "service": "FlowBoard API",
+  "service": "cod8flow API",
   "version": "1.0.0",
   "timestamp": "2026-06-02T..."
 }

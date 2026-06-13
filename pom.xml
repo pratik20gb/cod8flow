@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.flowboard</groupId>
-	<artifactId>flowboard</artifactId>
+	<artifactId>cod8flow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>

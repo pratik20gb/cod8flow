@@ -1,11 +1,11 @@
 spring:
   application:
-    name: flowboard
+    name: cod8flow
 
   datasource:
     url: jdbc:postgresql://localhost:5432/flowboard_db
-    username: ${DB_USERNAME:flowboard}
-    password: ${DB_PASSWORD:flowboard}
+    username: ${DB_USERNAME:com.cod8flow}
+    password: ${DB_PASSWORD:com.cod8flow}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -46,7 +46,7 @@ management:
 
 logging:
   level:
-    com.flowboard: DEBUG
+    com.cod8flow: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: INFO
   pattern:

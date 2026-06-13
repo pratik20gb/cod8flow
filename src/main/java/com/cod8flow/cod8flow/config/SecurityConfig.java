@@ -1,4 +1,4 @@
-package com.flowboard.flowboard.config;
+package com.cod8flow.cod8flow.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
