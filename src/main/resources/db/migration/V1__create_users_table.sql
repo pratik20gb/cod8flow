@@ -19,4 +19,4 @@ CREATE TABLE users (
 
 CREATE INDEX idx_users_email ON users(email);
 
-COMMENT ON TABLE users IS 'Stores all FlowBoard user accounts';
+COMMENT ON TABLE users IS 'Stores all COD8FLOW user accounts';

@@ -1,4 +1,4 @@
-package com.flowboard.flowboard.controller;
+package com.cod8flow.cod8flow.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class HealthController {
     public ResponseEntity<Map<String, Object>> health() {
         return ResponseEntity.ok(Map.of(
                 "status", "UP",
-                "service", "FlowBoard API",
+                "service", "COD8FLOW API",
                 "timestamp", LocalDateTime.now().toString(),
                 "version", "1.0.0"
         ));

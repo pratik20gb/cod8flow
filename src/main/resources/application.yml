@@ -1,11 +1,11 @@
 spring:
   application:
-    name: flowboard
+    name: cod8flow
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/flowboard_db
-    username: ${DB_USERNAME:flowboard}
-    password: ${DB_PASSWORD:flowboard}
+    url: jdbc:postgresql://localhost:5433/cod8flow_db
+    username: ${DB_USERNAME:cod8flow}
+    password: ${DB_PASSWORD:cod8flow}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -46,8 +46,13 @@ management:
 
 logging:
   level:
-    com.flowboard: DEBUG
+    com.cod8flow: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+application:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000

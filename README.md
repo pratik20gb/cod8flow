@@ -1,4 +1,4 @@
-# FlowBoard 🗂️
+# COD8FLOW 🗂️
 
 A full-stack project management SaaS application built with Java Spring Boot and React.
 Inspired by Jira — built from scratch to learn industry-grade Java development end to end.
@@ -60,7 +60,7 @@ Inspired by Jira — built from scratch to learn industry-grade Java development
 ## 📁 Project Structure
 
 ```
-src/main/java/com/flowboard/
+src/main/java/com/cod8flow/
 ├── config/          # Spring configuration (Security, Redis, S3)
 ├── controller/      # REST controllers — HTTP layer
 ├── service/         # Business logic layer
@@ -92,8 +92,8 @@ src/main/resources/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/pratik20gb/flowboard.git
-cd flowboard
+git clone https://github.com/pratik20gb/cod8flow.git
+cd cod8flow
 ```
 
 ### Start infrastructure
@@ -121,7 +121,7 @@ Expected response:
 ```json
 {
   "status": "UP",
-  "service": "FlowBoard API",
+  "service": "COD8FLOW API",
   "version": "1.0.0",
   "timestamp": "2026-06-02T..."
 }
