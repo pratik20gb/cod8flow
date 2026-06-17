@@ -18,6 +18,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+//redis
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+
+
 @Service
 @RequiredArgsConstructor
 public class WorkspaceService {
@@ -63,6 +68,8 @@ public class WorkspaceService {
                 .toList();
     }
 
+
+    @Cacheable(value="workspaces",key = "#id")
     public WorkspaceResponse getById(UUID id) {
         Workspace workspace = workspaceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Workspace not found"));
@@ -70,6 +77,7 @@ public class WorkspaceService {
     }
 
     @Transactional
+    @CacheEvict(value = "workspaces",key = "#id")
     public void delete(UUID id) {
         User currentUser = getCurrentUser();
         Workspace workspace = workspaceRepository.findById(id)
