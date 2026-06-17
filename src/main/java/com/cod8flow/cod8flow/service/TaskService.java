@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -61,6 +64,7 @@ public class TaskService {
                 .toList();
     }
 
+    @Cacheable(value = "boards", key = "#id")
     public TaskResponse getById(UUID id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -68,6 +72,7 @@ public class TaskService {
     }
 
     @Transactional
+    @CacheEvict(value = "tasks", key = "#id")
     public TaskResponse updateStatus(UUID id, UpdateTaskStatusRequest request) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -77,6 +82,7 @@ public class TaskService {
     }
 
     @Transactional
+    @CacheEvict(value = "boards", key = "#id")
     public void delete(UUID id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));

@@ -6,6 +6,10 @@ import com.cod8flow.cod8flow.dto.request.CreateBoardRequest;
 import com.cod8flow.cod8flow.dto.response.BoardResponse;
 import com.cod8flow.cod8flow.repository.BoardRepository;
 import com.cod8flow.cod8flow.repository.WorkspaceRepository;
+
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +47,7 @@ public class BoardService {
                 .toList();
     }
 
+    @Cacheable(value = "boards", key = "#id")
     public BoardResponse getById(UUID id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Board not found"));
@@ -50,6 +55,7 @@ public class BoardService {
     }
 
     @Transactional
+    @CacheEvict(value = "boards", key = "#id")
     public void delete(UUID id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Board not found"));
