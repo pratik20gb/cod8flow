@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C8FLOW</title>
     <link rel="icon" href="code8flow-favicon.svg" type="image/svg+xml">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Code8Flow — coming soon">
+    <meta property="og:description" content="Where work flows.">
+    <meta property="og:image" content="https://thcod8r.space/code8flow-wordmark-lockup.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Code8Flow — coming soon">
+    <meta name="twitter:description" content="Where work flows.">
+    <meta name="twitter:image" content="https://thcod8r.space/code8flow-wordmark-lockup.svg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -28,17 +36,52 @@
             text-align: center;
         }
 
-        .banner-wrap {
-            margin: 0 auto 14px;
+        .logo-wrap {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 32px;
             opacity: 0;
-            animation: fadeIn 0.8s 0.2s ease forwards;
+            animation: fadeIn 0.6s ease forwards;
         }
 
-        .banner-img {
-            width: 100%;
-            max-width: 360px;
-            display: block;
-            margin: 0 auto;
+        .logo-wrap svg { width: 100%; height: 100%; }
+
+        .sq {
+            fill: none;
+            stroke-width: 4.5;
+            stroke-linejoin: round;
+        }
+
+        .sq-back {
+            stroke: url(#goldBack);
+            stroke-dasharray: 360;
+            stroke-dashoffset: 360;
+            animation: draw 1.1s 0.2s cubic-bezier(0.65,0,0.35,1) forwards;
+        }
+
+        .sq-front {
+            stroke: url(#goldFront);
+            stroke-dasharray: 360;
+            stroke-dashoffset: 360;
+            animation: draw 1.1s 0.5s cubic-bezier(0.65,0,0.35,1) forwards;
+        }
+
+        .shine-mask-rect {
+            transform: translateX(-140px);
+            animation: shineSweep 2.6s 1.7s ease-in-out forwards;
+        }
+
+        .wordmark {
+            font-size: 38px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0 0 14px;
+            background: linear-gradient(135deg, #FFF8DE 0%, #E8B84B 45%, #B8862E 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            animation: fadeUp 0.7s 1.0s ease forwards;
         }
 
         .tagline {
@@ -162,17 +205,15 @@
             animation: fadeUp 0.7s 1.9s ease forwards;
         }
 
+        @keyframes draw { to { stroke-dashoffset: 0; } }
         @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes shineSweep { from { transform: translateX(-140px); } to { transform: translateX(320px); } }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         @media (max-width: 560px) {
             .stage {
                 padding: 32px 16px;
-            }
-
-            .banner-img {
-                max-width: 260px;
             }
 
             .teaser-wrap {
@@ -197,9 +238,42 @@
 
 <div class="stage">
 
-    <div class="banner-wrap">
-        <img src="code8flow-wordmark-lockup.svg" alt="code8flow" class="banner-img">
+    <div class="logo-wrap">
+        <svg viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="goldBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="18%" stop-color="#FFF3CC"/>
+                    <stop offset="45%" stop-color="#D9A53D"/>
+                    <stop offset="75%" stop-color="#9A7325"/>
+                    <stop offset="100%" stop-color="#6E4F15"/>
+                </linearGradient>
+                <linearGradient id="goldFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="20%" stop-color="#FFF8DE"/>
+                    <stop offset="48%" stop-color="#E8B84B"/>
+                    <stop offset="78%" stop-color="#B8862E"/>
+                    <stop offset="100%" stop-color="#8A621F"/>
+                </linearGradient>
+                <clipPath id="logoClip">
+                    <rect x="20" y="20" width="40" height="40" rx="6.5"/>
+                    <rect x="40" y="40" width="40" height="40" rx="6.5"/>
+                </clipPath>
+                <linearGradient id="shineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+                    <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+            <rect class="sq sq-back" x="20" y="20" width="40" height="40" rx="6.5"/>
+            <rect class="sq sq-front" x="40" y="40" width="40" height="40" rx="6.5"/>
+            <g clip-path="url(#logoClip)">
+                <rect class="shine-mask-rect" x="0" y="0" width="60" height="100" fill="url(#shineGrad)" style="transform-origin: 0 0; transform-box: fill-box;"/>
+            </g>
+        </svg>
     </div>
+
+    <h1 class="wordmark">code8flow</h1>
     <p class="tagline">Where work flows.</p>
 
     <div class="status">
