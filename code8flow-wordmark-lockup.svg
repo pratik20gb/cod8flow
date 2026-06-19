@@ -1,0 +1,26 @@
+<svg width="420" height="120" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="borderGoldBack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="18%" stop-color="#FFF3CC"/>
+      <stop offset="45%" stop-color="#D9A53D"/>
+      <stop offset="75%" stop-color="#9A7325"/>
+      <stop offset="100%" stop-color="#6E4F15"/>
+    </linearGradient>
+    <linearGradient id="borderGoldFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="20%" stop-color="#FFF8DE"/>
+      <stop offset="48%" stop-color="#E8B84B"/>
+      <stop offset="78%" stop-color="#B8862E"/>
+      <stop offset="100%" stop-color="#8A621F"/>
+    </linearGradient>
+    <linearGradient id="textGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFF3CC"/>
+      <stop offset="100%" stop-color="#D9A53D"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="420" height="120" fill="#0A0A0A"/>
+  <rect x="24" y="20" width="56" height="56" rx="9" fill="none" stroke="url(#borderGoldBack)" stroke-width="3"/>
+  <rect x="52" y="48" width="56" height="56" rx="9" fill="none" stroke="url(#borderGoldFront)" stroke-width="3"/>
+  <text x="150" y="68" font-family="Arial, sans-serif" font-size="34" font-weight="600" fill="url(#textGold)">code8flow</text>
+</svg>
