@@ -288,14 +288,14 @@ Schema changes are managed exclusively with **Flyway**.
 
 ## Roadmap
 
-| Phase | Focus                                                       | Status          |
-|-------|-------------------------------------------------------------|-----------------|
+| Phase | Focus                                                       | Status         |
+|-------|-------------------------------------------------------------|----------------|
 | 1     | Core setup, Docker, Flyway, health endpoints                | ✅ Complete     |
 | 2     | Authentication — register, login, refresh token rotation    | ✅ Complete     |
 | 3     | Workspaces, Boards, Tasks — full domain implementation      | ✅ Complete     |
 | 4     | Redis caching + AWS S3 file & attachment support            | ✅ Complete     |
-| 5     | Kafka event bus + notification system                       | 🚧 In Progress |
-| 6     | Testing suite — unit, integration, API                      | ⏳ Pending      |
+| 5     | Kafka event bus + notification system                       | ✅ Complete     |
+| 6     | Testing suite — unit, integration, API                      | 🚧 In Progress |
 | 7     | Production frontend, CI/CD pipeline, monitoring dashboards  | ⏳ Pending      |
 
 ---
