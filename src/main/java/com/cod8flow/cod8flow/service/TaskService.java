@@ -8,6 +8,7 @@ import com.cod8flow.cod8flow.domain.enums.TaskStatus;
 import com.cod8flow.cod8flow.dto.request.CreateTaskRequest;
 import com.cod8flow.cod8flow.dto.request.UpdateTaskStatusRequest;
 import com.cod8flow.cod8flow.dto.response.TaskResponse;
+import com.cod8flow.cod8flow.event.TaskAssignedEvent;
 import com.cod8flow.cod8flow.repository.BoardRepository;
 import com.cod8flow.cod8flow.repository.TaskRepository;
 import com.cod8flow.cod8flow.repository.UserRepository;
@@ -28,6 +29,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final TaskEventProducer taskEventProducer;
 
     @Transactional
     public TaskResponse create(UUID boardId, CreateTaskRequest request) {
@@ -54,6 +56,19 @@ public class TaskService {
                 .build();
 
         taskRepository.save(task);
+
+        //publish event if task has an assignee
+        if(assignee != null) {
+            TaskAssignedEvent event = TaskAssignedEvent.builder()
+                    .taskId(task.getId())
+                    .taskTitle((task.getTitle()))
+                    .assigneeId(assignee.getId())
+                    .assigneeEmail(assignee.getEmail())
+                    .boardId(board.getId())
+                    .priority(task.getPriority().name())
+                    .build();
+            taskEventProducer.publishTaskAssigned(event);
+        }
         return mapToResponse(task);
     }
 

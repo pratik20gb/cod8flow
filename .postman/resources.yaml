@@ -1,0 +1,7 @@
+workspace:
+  id: 760cfa2c-7615-4137-ac70-e0a076fb8916
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections: {}

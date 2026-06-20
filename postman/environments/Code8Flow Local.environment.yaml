@@ -1,0 +1,17 @@
+name: Code8Flow Local
+values:
+  - key: baseUrl
+    value: ''
+  - key: accessToken
+    secret: true
+  - key: refreshToken
+    secret: true
+  - key: workspaceId
+    value: ''
+  - key: boardId
+    value: ''
+  - key: taskId
+    value: ''
+  - key: userId
+    value: ''
+color: 0

@@ -1,0 +1,8 @@
+$kind: collection
+name: COD8FLOW api
+auth:
+  - id: 798fe7a9-7982-4431-a09d-a07c723eefbb
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: "{{accessToken}}"
