@@ -31,15 +31,25 @@ spring:
     error:
       include-message: always
       include-binding-errors: always
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: cod8flow-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
   data:
     redis:
       host: localhost
       port: 6379
-    cache:
-      type: redis
-      redis:
-        time-to-live: 600000
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
 server:
   port: 8080
 
