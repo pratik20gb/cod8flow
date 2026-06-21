@@ -38,3 +38,12 @@ build/
 ### Windows ###
 Thumbs.db
 .claude
+
+### Claude Code ###
+CLAUDE.md
+cod8flow-frontend/CLAUDE.md
+
+### Unused template assets ###
+cod8flow-frontend/src/assets/react.svg
+cod8flow-frontend/src/assets/vite.svg
+cod8flowreadme/
