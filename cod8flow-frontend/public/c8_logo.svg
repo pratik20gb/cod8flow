@@ -1,0 +1,20 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="borderGoldBack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="18%" stop-color="#FFF3CC"/>
+      <stop offset="45%" stop-color="#D9A53D"/>
+      <stop offset="75%" stop-color="#9A7325"/>
+      <stop offset="100%" stop-color="#6E4F15"/>
+    </linearGradient>
+    <linearGradient id="borderGoldFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="20%" stop-color="#FFF8DE"/>
+      <stop offset="48%" stop-color="#E8B84B"/>
+      <stop offset="78%" stop-color="#B8862E"/>
+      <stop offset="100%" stop-color="#8A621F"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="80" height="80" rx="13" fill="none" stroke="url(#borderGoldBack)" stroke-width="4"/>
+  <rect x="80" y="80" width="80" height="80" rx="13" fill="none" stroke="url(#borderGoldFront)" stroke-width="4"/>
+</svg>
