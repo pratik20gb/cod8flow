@@ -44,7 +44,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/api/v1/health",
-                                "/actuator/**"
+                                "/actuator/**",
+                                "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -60,7 +61,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Value("${cors.allowed-origins}")
+    @Value("${CORS_ALLOWED_ORIGINS:${cors.allowed-origins:http://localhost:5173}}")
     private String allowedOrigins;
 
     @Bean
