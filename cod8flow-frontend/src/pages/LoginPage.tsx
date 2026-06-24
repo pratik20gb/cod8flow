@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from '../api/auth.api';
+import { useGoogleLogin } from '@react-oauth/google';
+import { login, googleLogin } from '../api/auth.api';
 import { useAuthStore } from '../store/auth.store';
+
+// Demo credentials — update these to match accounts created in the DB
+const DEMO_ACCOUNTS = [
+  { label: 'Demo · Interviewer', email: 'interviewer@cod8flow.com', password: 'Demo1234!' },
+  { label: 'Demo · Developer',   email: 'developer@cod8flow.com',   password: 'Demo1234!' },
+];
 
 interface Task {
   id: string;
@@ -72,6 +79,15 @@ const XIcon = () => (
   </svg>
 );
 
+const GoogleIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+  </svg>
+);
+
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13">
     <path d="M5 12h14M13 6l6 6-6 6" />
@@ -115,8 +131,8 @@ const FloatingInput = ({
 );
 
 const SocialPill = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => (
-  
-   <a href={href}
+  <a
+    href={href}
     target="_blank"
     rel="noopener noreferrer"
     className="group flex items-center gap-[6px] px-[12px] py-[7px] bg-[#101010] border border-white/[0.06] rounded-full hover:bg-[#14110a] hover:border-[#D9A53D]/[0.18] transition-all"
@@ -131,44 +147,16 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login: storeLogin } = useAuthStore();
 
-  const [mode, setMode] = useState<'login' | 'register'>('login');
-  const [flipping, setFlipping] = useState(false);
-  const [flipStage, setFlipStage] = useState<'idle' | 'first-half' | 'second-half'>('idle');
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const [columns, setColumns] = useState<Column[]>(INITIAL_COLUMNS);
   const [draggedTask, setDraggedTask] = useState<{ task: Task; fromColId: string } | null>(null);
   const [dragOverColId, setDragOverColId] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const triggerFlip = (targetMode: 'login' | 'register') => {
-    if (flipping) return;
-    setFlipping(true);
-    setFlipStage('first-half');
-    setError('');
-
-    // At 300ms (mid-flip) swap the content
-    setTimeout(() => {
-      setMode(targetMode);
-      setEmail('');
-      setPassword('');
-      setFirstName('');
-      setLastName('');
-      setFlipStage('second-half');
-    }, 300);
-
-    // At 600ms flip completes
-    setTimeout(() => {
-      setFlipping(false);
-      setFlipStage('idle');
-    }, 600);
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -254,20 +242,45 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      if (mode === 'login') {
-        const res = await login({ email, password });
-        storeLogin(res.data.accessToken, res.data.refreshToken, res.data.email, res.data.role);
-        navigate('/');
-      } else {
-        const res = await register({ firstName, lastName, email, password });
-        storeLogin(res.data.accessToken, res.data.refreshToken, res.data.email, res.data.role);
-        navigate('/');
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || (mode === 'login' ? 'Invalid email or password' : 'Registration failed'));
+      const res = await login({ email, password });
+      storeLogin(res.data.accessToken, res.data.refreshToken, res.data.email, res.data.role);
+      navigate('/');
+    } catch {
+      setError('Invalid email or password');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setGoogleLoading(true);
+      setError('');
+      try {
+        // Exchange Google access token for ID token via userinfo
+        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        if (!userInfoRes.ok) throw new Error('Failed to fetch user info');
+        // Use the access token to call our backend
+        const res = await googleLogin(tokenResponse.access_token);
+        storeLogin(res.data.accessToken, res.data.refreshToken, res.data.email, res.data.role);
+        navigate('/');
+      } catch {
+        setError('Google sign-in failed. Please try again.');
+      } finally {
+        setGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google sign-in was cancelled.');
+    },
+  });
+
+  const fillDemo = (demo: typeof DEMO_ACCOUNTS[0]) => {
+    setEmail(demo.email);
+    setPassword(demo.password);
+    setError('');
   };
 
   const handleDragStart = (task: Task, fromColId: string) => setDraggedTask({ task, fromColId });
@@ -282,13 +295,6 @@ export default function LoginPage() {
     setDraggedTask(null);
     setDragOverColId(null);
   };
-
-  // Coin flip CSS transform
-  const logoTransform = (() => {
-    if (flipStage === 'first-half') return 'rotateY(90deg)';
-    if (flipStage === 'second-half') return 'rotateY(0deg)';
-    return 'rotateY(0deg)';
-  })();
 
   return (
     <div className="relative min-h-screen w-full bg-[#0A0A0A] overflow-hidden">
@@ -394,62 +400,48 @@ export default function LoginPage() {
             </div>
 
             {/* Center content */}
-            <div className="flex-1 flex flex-col justify-center gap-6">
+            <div className="flex-1 flex flex-col justify-center gap-5">
 
-              {/* Coin logo — animates on mode switch */}
-              <div className="flex justify-center" style={{ perspective: '600px' }}>
-                <div
-                  style={{
-                    transform: logoTransform,
-                    transition: flipStage === 'idle' ? 'none' : 'transform 0.3s ease-in-out',
-                    transformStyle: 'preserve-3d',
-                  }}
-                >
-                  <img
-                    src="/c8_logo.svg"
-                    alt="thecod8r logo"
-                    className="w-16 h-16 object-contain"
-                    style={{
-                      filter: 'drop-shadow(0 0 20px rgba(217,165,61,0.3))',
-                    }}
-                  />
-                </div>
+              {/* Logo */}
+              <div className="flex justify-center">
+                <img
+                  src="/c8_logo.svg"
+                  alt="thecod8r logo"
+                  className="w-16 h-16 object-contain"
+                  style={{ filter: 'drop-shadow(0 0 20px rgba(217,165,61,0.3))' }}
+                />
+              </div>
+
+              {/* Demo accounts */}
+              <div className="flex flex-col gap-[6px]">
+                <p className="text-[10px] text-white/[0.18] uppercase tracking-[0.06em] text-center mb-1">
+                  Quick access
+                </p>
+                {DEMO_ACCOUNTS.map(demo => (
+                  <button
+                    key={demo.email}
+                    type="button"
+                    onClick={() => fillDemo(demo)}
+                    className="w-full flex items-center justify-between px-3 py-2 bg-white/[0.03] border border-white/[0.07] rounded-lg hover:bg-[#D9A53D]/[0.04] hover:border-[#D9A53D]/20 transition-all group"
+                  >
+                    <span className="text-[11px] text-white/40 group-hover:text-white/70 transition-colors">{demo.label}</span>
+                    <span className="text-[10px] text-white/20 group-hover:text-[#D9A53D]/60 transition-colors font-mono">{demo.email}</span>
+                  </button>
+                ))}
               </div>
 
               {/* Form card */}
               <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-5">
-
                 <div className="mb-4">
                   <h2 className="text-[17px] font-semibold text-white tracking-tight mb-0.5">
-                    {mode === 'login' ? 'Sign in' : 'Create account'}
+                    Sign in
                   </h2>
                   <p className="text-white/25 text-[11px]">
-                    {mode === 'login'
-                      ? 'Welcome back. Pick up where you left off'
-                      : 'Join code8flow. Ship work faster'}
+                    Welcome back. Pick up where you left off.
                   </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col">
-                  {mode === 'register' && (
-                    <div className="grid grid-cols-2 gap-2 mb-0">
-                      <FloatingInput
-                        id="reg-first"
-                        type="text"
-                        label="First name"
-                        value={firstName}
-                        onChange={e => setFirstName(e.target.value)}
-                      />
-                      <FloatingInput
-                        id="reg-last"
-                        type="text"
-                        label="Last name"
-                        value={lastName}
-                        onChange={e => setLastName(e.target.value)}
-                      />
-                    </div>
-                  )}
-
                   <FloatingInput
                     id="auth-email"
                     type="email"
@@ -465,15 +457,11 @@ export default function LoginPage() {
                     onChange={e => setPassword(e.target.value)}
                   />
 
-                  {mode === 'login' && (
-                    <div className="text-right mb-3 mt-1">
-                      <span className="text-[11px] text-white/20 cursor-pointer hover:text-[#D9A53D]/60 transition-colors">
-                        Forgot password?
-                      </span>
-                    </div>
-                  )}
-
-                  {mode === 'register' && <div className="mt-2" />}
+                  <div className="text-right mb-3 mt-1">
+                    <span className="text-[11px] text-white/20 cursor-pointer hover:text-[#D9A53D]/60 transition-colors">
+                      Forgot password?
+                    </span>
+                  </div>
 
                   {error && (
                     <div className="mb-3 px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs">
@@ -483,41 +471,39 @@ export default function LoginPage() {
 
                   <button
                     type="submit"
-                    disabled={loading || flipping}
+                    disabled={loading || googleLoading}
                     className="relative w-full py-[11px] bg-[#D9A53D] hover:bg-[#c8952e] rounded-lg text-[#0A0A0A] text-[13px] font-bold tracking-[0.02em] flex items-center justify-center gap-2 overflow-hidden transition-all hover:-translate-y-px active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <span className="absolute top-0 left-0 right-0 h-px bg-white/20" />
-                    {loading ? (mode === 'login' ? 'Signing in...' : 'Creating account...') : (
+                    {loading ? 'Signing in...' : (
                       <>
-                        <span>{mode === 'login' ? 'Sign in' : 'Create account'}</span>
+                        <span>Sign in</span>
                         <ArrowIcon />
                       </>
                     )}
                   </button>
                 </form>
 
-                <p className="text-center text-[11px] text-white/20 mt-3">
-                  {mode === 'login' ? (
-                    <>
-                      Don't have an account?{' '}
-                      <button
-                        onClick={() => triggerFlip('register')}
-                        className="text-[#D9A53D] font-medium hover:text-[#c8952e] transition-colors bg-transparent border-none cursor-pointer text-[11px] p-0"
-                      >
-                        Create one
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      Already have an account?{' '}
-                      <button
-                        onClick={() => triggerFlip('login')}
-                        className="text-[#D9A53D] font-medium hover:text-[#c8952e] transition-colors bg-transparent border-none cursor-pointer text-[11px] p-0"
-                      >
-                        Sign in
-                      </button>
-                    </>
-                  )}
+                {/* Divider */}
+                <div className="flex items-center gap-2 my-3">
+                  <div className="flex-1 h-px bg-white/[0.06]" />
+                  <span className="text-[10px] text-white/20">or</span>
+                  <div className="flex-1 h-px bg-white/[0.06]" />
+                </div>
+
+                {/* Google sign-in */}
+                <button
+                  type="button"
+                  onClick={() => handleGoogleLogin()}
+                  disabled={loading || googleLoading}
+                  className="w-full flex items-center justify-center gap-2.5 py-[10px] bg-white/[0.04] border border-white/[0.08] rounded-lg text-[13px] text-white/70 hover:bg-white/[0.07] hover:border-white/[0.14] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <GoogleIcon />
+                  {googleLoading ? 'Signing in...' : 'Continue with Google'}
+                </button>
+
+                <p className="text-center text-[10px] text-white/[0.13] mt-4">
+                  Access by invitation only
                 </p>
               </div>
             </div>
@@ -529,7 +515,7 @@ export default function LoginPage() {
               </p>
               <div className="flex gap-2 justify-center">
                 <SocialPill href="https://github.com/pratik20gb" icon={<GitHubIcon />} label="pratik20gb" />
-                <SocialPill href="https://x.com/pratik20gb" icon={<XIcon />} label="pratik20gb" />
+                <SocialPill href="https://x.com/thecod8r" icon={<XIcon />} label="thecod8r" />
               </div>
             </div>
 

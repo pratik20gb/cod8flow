@@ -7,6 +7,9 @@ export const register = (data: RegisterRequest) =>
 export const login = (data: LoginRequest) =>
   api.post<AuthResponse>('/auth/login', data);
 
+export const googleLogin = (idToken: string) =>
+  api.post<AuthResponse>('/auth/google', { idToken });
+
 export const refresh = (refreshToken: string) =>
   api.post<AuthResponse>('/auth/refresh', {}, {
     headers: { Authorization: `Bearer ${refreshToken}` },

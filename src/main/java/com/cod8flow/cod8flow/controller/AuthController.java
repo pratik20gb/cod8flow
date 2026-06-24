@@ -1,6 +1,7 @@
 package com.cod8flow.cod8flow.controller;
 
 
+import com.cod8flow.cod8flow.dto.request.GoogleAuthRequest;
 import com.cod8flow.cod8flow.dto.request.LoginRequest;
 import com.cod8flow.cod8flow.dto.request.RegisterRequest;
 import com.cod8flow.cod8flow.dto.response.AuthResponse;
@@ -34,6 +35,13 @@ public class AuthController {
     )
     {
         return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(
+            @RequestBody GoogleAuthRequest request
+    ) {
+        return ResponseEntity.ok(authService.googleLogin(request));
     }
 
     @PostMapping("/refresh")
